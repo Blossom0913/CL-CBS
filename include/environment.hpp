@@ -244,8 +244,8 @@ class Environment {
     rsStart->setYaw(-state.yaw);
     rsEnd->setXY(getGoal().x, getGoal().y);
     rsEnd->setYaw(-getGoal().yaw);
-    ompl::base::ReedsSheppStateSpace::ReedsSheppPath reedsShepppath =
-        reedsSheppSpace.reedsShepp(rsStart, rsEnd);
+    ompl::base::ReedsSheppStateSpace::PathType reedsShepppath =
+        reedsSheppSpace.getPath(rsStart, rsEnd);
 
     std::vector<State> path;
     std::unordered_map<State, std::tuple<State, Action, double, double>,

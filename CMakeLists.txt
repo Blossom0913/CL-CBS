@@ -3,8 +3,7 @@ cmake_minimum_required(VERSION 3.5)
 project(CL-CBS)
 
 find_package(Boost 1.58 REQUIRED COMPONENTS program_options)
-find_package(PkgConfig)
-pkg_check_modules(YamlCpp yaml-cpp)
+find_package(yaml-cpp CONFIG REQUIRED)
 
 ## OPEN MOTION PLANNING LIBRARY
 find_package(OMPL REQUIRED)
@@ -89,7 +88,7 @@ add_executable(SH_Astar
   src/sh_astar.cpp
 )
 target_link_libraries(SH_Astar
-  ${Boost_LIBRARIES}
+  Boost::program_options
   ${OMPL_LIBRARIES}
 )
 
@@ -98,9 +97,9 @@ add_executable(CL-CBS
   src/cl_cbs.cpp
 )
 target_link_libraries(CL-CBS
-  ${Boost_LIBRARIES}
+  Boost::program_options
   ${OMPL_LIBRARIES}
-  yaml-cpp
+  yaml-cpp::yaml-cpp
 )
 
 ## test CL-CBS
