@@ -4,6 +4,14 @@ project(CL-CBS)
 
 find_package(Boost 1.58 REQUIRED COMPONENTS program_options)
 find_package(yaml-cpp CONFIG REQUIRED)
+if(TARGET yaml-cpp::yaml-cpp)
+  set(CL_CBS_YAML_TARGET yaml-cpp::yaml-cpp)
+elseif(TARGET yaml-cpp)
+  set(CL_CBS_YAML_TARGET yaml-cpp)
+else()
+  message(FATAL_ERROR
+    "yaml-cpp package exports neither yaml-cpp::yaml-cpp nor yaml-cpp")
+endif()
 
 ## OPEN MOTION PLANNING LIBRARY
 find_package(OMPL REQUIRED)
@@ -96,10 +104,14 @@ target_link_libraries(SH_Astar
 add_executable(CL-CBS
   src/cl_cbs.cpp
 )
+# Prefer the selected yaml-cpp headers when another version shares OMPL's prefix.
+target_include_directories(CL-CBS BEFORE PRIVATE
+  $<TARGET_PROPERTY:${CL_CBS_YAML_TARGET},INTERFACE_INCLUDE_DIRECTORIES>
+)
 target_link_libraries(CL-CBS
   Boost::program_options
   ${OMPL_LIBRARIES}
-  yaml-cpp::yaml-cpp
+  ${CL_CBS_YAML_TARGET}
 )
 
 ## test CL-CBS
