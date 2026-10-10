@@ -105,6 +105,8 @@ add_executable(CL-CBS
   src/cl_cbs.cpp
 )
 # Prefer the selected yaml-cpp headers when another version shares OMPL's prefix.
+# Keep imported includes ordinary so BEFORE also precedes OMPL's -I paths.
+set_property(TARGET CL-CBS PROPERTY NO_SYSTEM_FROM_IMPORTED TRUE)
 target_include_directories(CL-CBS BEFORE PRIVATE
   $<TARGET_PROPERTY:${CL_CBS_YAML_TARGET},INTERFACE_INCLUDE_DIRECTORIES>
 )
